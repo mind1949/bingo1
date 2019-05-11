@@ -3,6 +3,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/mind1949/bingo1/controllers"
 	"net/http"
 	"strings"
 )
@@ -26,7 +27,7 @@ func (rt *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	// show post
 	if strings.HasPrefix(path, "/posts/") && path != "/posts/" {
-		fmt.Fprintf(w, "post: %s", "postname")
+		controllers.ShowPost(w, path)
 	}
 	// tags index
 	if path == "/tags" || path == "/tags/" {
