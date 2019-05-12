@@ -8,7 +8,7 @@ import (
 )
 
 func ShowPost(w io.Writer, filepath string) {
-	post, err := models.NewPost(filepath)
+	post, err := models.FindPost(filepath)
 	if err != nil {
 		log.Fatal(err)
 	}

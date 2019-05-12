@@ -1,28 +1,38 @@
 package models
 
 import (
-	"strings"
+	"github.com/mind1949/bingo1/ofm"
+	yaml "gopkg.in/yaml.v2"
+	"fmt"
 )
 
+type Meta struct {
+	Title, Date string
+	Tags  []string
+}
+
 type Post struct {
-	Title   string
 	Content []byte
+	Meta    *Meta
 }
 
-func NewPost(filepath string) (*Post, error) {
-	title := getPostTitle(filepath)
-	content := getPostContent(filepath)
+func FindPost(urlpath string) (*Post, error) {
+	// TODO(更改为传入一个post实例，而不是slice)
+	filepath := getFilepath(urlpath)
+	slice := make([][]byte, 2)
+	if err := ofm.Find(slice, filepath); err != nil {
+		fmt.Printf("error ofmt.Find: %s", err)
+	}
 
-	return &Post{
-		Title:   title,
-		Content: content,
-	}, nil
+	post := Post{Meta: &Meta{}}
+	if err := yaml.Unmarshal(slice[0], post.Meta); err != nil {
+		fmt.Printf("error yaml.Unmarshal: %s\n", err)
+	}
+	post.Content = slice[1]
+
+	return &post, nil
 }
 
-func getPostTitle(filepath string) string {
-	return strings.Split(strings.TrimLeft(filepath, "/"), "/")[1]
-}
-
-func getPostContent(filepath string) []byte {
-	return []byte("<p>post content</p>")
+func getFilepath(urlpath string) string {
+	return ("." + urlpath + ".md")
 }
