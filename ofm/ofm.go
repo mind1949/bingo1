@@ -50,8 +50,9 @@ func filter(filecontent []byte) (yamlRaw []byte, htmlContent []byte) {
 }
 
 func splitContent(filecontent []byte) ([]byte, []byte) {
+	filecontent = bytes.TrimSpace(filecontent)
 	sep := []byte("---\n")
-	result := bytes.Split(filecontent, sep)
+	result := bytes.SplitN(filecontent, sep, 3)
 	return result[1], result[2]
 }
 
