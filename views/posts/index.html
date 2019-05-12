@@ -1,0 +1,26 @@
+{{ define "content" }}
+
+{{ range .  }}
+<div class="short">
+    <h2><a href="posts/{{.Meta.Title}}">{{.Meta.Title}}</a></h2>
+    <div class="datettr">
+        <span class="date">{{.Meta.Date}}</span>-
+            {{ range .Meta.Tags }}
+                <span><a href="#">#{{ . }}</a></span>
+            {{ end }}
+        </span>
+    </div>
+    <div>
+        <a href="posts/{{.Meta.Title}}">
+            <p>
+                {{.Meta.Short}}
+            </p>
+        </a>
+    </div>
+    <div class="readmore">
+        <a href="posts/{{.Meta.Title}}">read more...</a>
+    </div>
+</div>
+{{ end  }}
+
+{{ end }}
