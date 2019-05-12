@@ -23,7 +23,7 @@ func (rt *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	// posts index
 	if path == "/posts" || path == "/posts/" {
-		fmt.Fprint(w, "posts index")
+		controllers.Posts(w, path)
 	}
 	// show post
 	if strings.HasPrefix(path, "/posts/") && path != "/posts/" {

@@ -7,11 +7,25 @@ import (
 	"log"
 )
 
-func ShowPost(w io.Writer, filepath string) {
-	post, err := models.FindPost(filepath)
+const (
+	TemplateShow = "views/posts/show.html"
+	TemplateIndex = "views/posts/index.html"
+)
+
+func ShowPost(w io.Writer, urlpath string) {
+	post, err := models.FindPost(urlpath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	render.Execute(w, "views/posts/show.html", &post)
+	render.Execute(w, TemplateShow, &post)
+}
+
+func Posts(w io.Writer, filepath string) {
+	posts, err := models.FindAllPosts()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	render.Execute(w, TemplateIndex, &posts)
 }

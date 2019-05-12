@@ -5,6 +5,11 @@ import (
 	"github.com/russross/blackfriday"
 	"io/ioutil"
 	"fmt"
+	"path/filepath"
+)
+
+const(
+	postsDir = "posts"
 )
 
 func Find(slice [][]byte, filepath string) error {
@@ -15,6 +20,27 @@ func Find(slice [][]byte, filepath string) error {
 	slice[0], slice[1] = filter(fileContent)
 
 	return nil
+}
+
+func FindAll() ([][][]byte, error) {
+	postsInfo := [][][]byte{}
+	fileinfos, err := ioutil.ReadDir(postsDir)
+	if err != nil {
+		return nil, err
+	}
+	for _, fileinfo := range fileinfos {
+		if fileinfo.IsDir() {
+			continue
+		}
+
+		postInfo := make([][]byte, 2)
+		if err := Find(postInfo, filepath.Join(postsDir, fileinfo.Name())); err != nil {
+			return nil, err
+		}
+		postsInfo = append(postsInfo, postInfo)
+	}
+
+	return postsInfo, nil
 }
 
 func filter(filecontent []byte) (yamlRaw []byte, htmlContent []byte) {
