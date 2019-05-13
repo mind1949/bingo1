@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/mind1949/bingo1/ofm"
 	yaml "gopkg.in/yaml.v2"
+	"github.com/mind1949/bingo1/ofmx"
 	"fmt"
 )
 
@@ -17,19 +18,11 @@ type Post struct {
 }
 
 func FindPost(urlpath string) (*Post, error) {
-	// TODO(更改为传入一个post实例，而不是slice)
 	filepath := getFilepath(urlpath)
-	slice := make([][]byte, 2)
-	if err := ofm.Find(slice, filepath); err != nil {
-		fmt.Printf("error ofmt.Find: %s", err)
-	}
-
 	post := Post{Meta: &Meta{}}
-	if err := yaml.Unmarshal(slice[0], post.Meta); err != nil {
-		fmt.Printf("error yaml.unmarshal: %s\n", err)
+	if err := ofmx.Scan(filepath, &post); err != nil {
+		return nil, err
 	}
-	post.Content = slice[1]
-
 	return &post, nil
 }
 
